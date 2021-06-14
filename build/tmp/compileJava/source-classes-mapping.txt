@@ -1,4 +1,8 @@
+io/villageminds/Address.java
+ io.villageminds.Address
 io/villageminds/UserDetails.java
  io.villageminds.UserDetails
+io/villageminds/UserDetails1.java
+ io.villageminds.UserDetails1
 io/villageminds/HibernateTest.java
  io.villageminds.HibernateTest

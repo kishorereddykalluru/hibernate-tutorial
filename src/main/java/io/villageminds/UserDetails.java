@@ -1,27 +1,59 @@
 package io.villageminds;
 
 import javax.persistence.*;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.Date;
+import java.io.Serializable;
+
+/**
+ * @Embedded divides the Object into fields while saving into database, Object fields are added as columns in UserDetails object
+ *
+ * If there two instances of same object then database will not allow us to create multiple columns with same name
+ * So we use @AttributeOverrides and @AttributeOverride to change the column names while saving to database
+ *
+ *
+ */
+
 
 @Entity
 @Table(name = "user_details")
-public class UserDetails {
+public class UserDetails implements Serializable {
 
-    @Id
+    @Id @GeneratedValue
     @Column(name = "user_id")
     private int userId;
     @Column(name = "user_name")
     private String userName;
-    @Column(name = "address")
-    private String address;
-    @Lob
-    @Column(name = "description")
-    private String description;
-    @Temporal(value = TemporalType.DATE)
-    @Column(name = "joined_date")
-    private Date joinedDate;
+    @Embedded
+    @AttributeOverrides({
+            @AttributeOverride(name = "city", column = @Column(name = "home_city")),
+            @AttributeOverride(name = "street", column = @Column(name = "home_street")),
+            @AttributeOverride(name = "state", column = @Column(name = "home_state")),
+            @AttributeOverride(name = "pincode", column = @Column(name = "home_pincode"))
+    })
+    private Address homeAddress;
+    @Embedded
+    @AttributeOverrides({
+            @AttributeOverride(name = "city", column = @Column(name = "office_city")),
+            @AttributeOverride(name = "street", column = @Column(name = "office_street")),
+            @AttributeOverride(name = "state", column = @Column(name = "office_state")),
+            @AttributeOverride(name = "pincode", column = @Column(name = "office_pincode"))
+    })
+    private Address officeAddress;
+
+    public Address getHomeAddress() {
+        return homeAddress;
+    }
+
+    public void setHomeAddress(Address homeAddress) {
+        this.homeAddress = homeAddress;
+    }
+
+    public Address getOfficeAddress() {
+        return officeAddress;
+    }
+
+    public void setOfficeAddress(Address officeAddress) {
+        this.officeAddress = officeAddress;
+    }
 
     public int getUserId() {
         return userId;
@@ -37,29 +69,5 @@ public class UserDetails {
 
     public void setUserName(String userName) {
         this.userName = userName;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public Date getJoinedDate() {
-        return joinedDate;
-    }
-
-    public void setJoinedDate(Date joinedDate) {
-        this.joinedDate = joinedDate;
     }
 }
